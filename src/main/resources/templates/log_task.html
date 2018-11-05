@@ -1,0 +1,228 @@
+<div ng-controller="logTask">
+
+    <div class="col-md-12" style="margin-top: 25px">
+        <button class="btn btn-info" ng-click="reloadServerList()">重载服务器列表信息</button>
+    </div>
+<!--日志配置-->
+    <div ng-include="'router?url=log_config'">
+
+    </div>
+    <!--日志配置-->
+    <div class="col-md-12" style="margin-top: 25px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    日志手动任务
+                    <button class="btn btn-success" ng-click="openLog({})">添加</button>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <!--<div class="form-inline">-->
+                <!--<span class="form-control levy-span">执行类</span>-->
+                <!--<input class=" form-control" type="text" ng-model="className" />-->
+                <!--<button class="btn btn-info" ng-click="pageChanged(0,className)">查询</button>-->
+                <!--</div>-->
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            编号
+                        </th>
+                        <th>
+                            服务器
+                        </th>
+                        <th>
+                            日志
+                        </th>
+                        <th>
+                            开始时间
+                        </th>
+                        <th>
+                            结束时间
+                        </th>
+                        <!--<th>-->
+                        <!--运行开始时间-->
+                        <!--</th>-->
+                        <!--<th>-->
+                        <!--运行结束时间-->
+                        <!--</th>-->
+                        <!--<th>-->
+                        <!--状态-->
+                        <!--</th>-->
+                        <!--<th>-->
+                        <!--异常-->
+                        <!--</th>-->
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="log in logs">
+                        <td style="width: 3%">
+                            {{$index+1}}
+                        </td>
+                        <td>
+                            {{log.servers}}
+                        </td>
+                        <td>
+                            {{log.logs}}
+                        </td>
+                        <td>
+                            {{log.startTime|date:'yyyy-MM-dd'}}
+                        </td>
+                        <td>
+                            {{log.endTime|date:'yyyy-MM-dd'}}
+                        </td>
+                        <td>
+                            {{log.runStartTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+                        <td>
+                            {{log.runEndTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+                        <td>
+                            <span ng-show="log.status == 0" style="color: #46b8da">运行中......</span>
+                            <span ng-show="log.status == 1" style="color: #4cae4c">成功</span>
+                            <span ng-show="log.status == 2" style="color: red">失败</span>
+                        </td>
+                        <td>
+                            <div style="max-width:300px;max-height:150px;overflow:hidden;text-overflow:ellipsis;"
+                                 data-toggle="tooltip" title="{{log.info}}"> {{log.info}}
+                            </div>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-info" ng-click="openLog(log)">修改</button>
+                            <button class="btn btn-info" ng-click="execute(log)">执行</button>
+                            <button class="btn btn-danger" ng-click="delete(log)">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="panel-footer">-->
+
+            <!--<pagination total-items="bigTotalItems" items-per-page="pageSize"-->
+            <!--ng-model="bigCurrentPage" max-size="maxSize"-->
+            <!--class="pagination" boundary-links="true" rotate="false"-->
+            <!--ng-change="pageChanged(bigCurrentPage,className)"-->
+            <!--num-pages="numPages"></pagination>-->
+
+            <!--<div class="count-page">-->
+            <!--第{{pageNumSkip==0?1:pageNumSkip}}/{{pages}}页&nbsp; &nbsp; 共{{bigTotalItems}}条-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+        </div>
+    </div>
+
+    <!--日志统计手动-->
+    <div ng-include="'router?url=log_count'">
+
+    </div>
+    <!--日志统计手动-->
+
+
+    <script type="text/ng-template" id="addLogModel">
+        <div class="modal-header">
+            <h4 class="modal-title">{{items['id']?'修改':'添加'}}日志手动任务</h4>
+        </div>
+        <form name="myForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <p class="form-inline">
+                        <!--      <span class="form-control levy-span"> 服务器</span>-->
+
+                    <div class="opType">
+                        <label class="levy-span">服务器</label> <span class="select-all"
+                                                                   onClick="addOpTypeActClass(this,2)" ng-click="items.servers = getSelected()">全选</span>
+                        <span><input type="text" ng-model="query"/></span>
+                        <span><input type="text" disabled ng-model="items.servers" style="width: 569px"/></span>
+                        <div class="opTypeValue">
+                            <div class="value" onClick="addOpTypeActClass(this,1);" ng-click="items.servers = getSelected()"
+                                 ng-repeat="server in serverConfigs|searchServer:query"
+                                 value="{{server.id}}">
+                                <span>{{"("+server.id+")"+server.serverName}} </span>
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                    </p>
+                    <p class="form-inline">
+                        <span class="form-control levy-span"> 开始时间</span>
+
+                        <input class="form-control" date-time-picker
+                               value="" ng-model="items.startTime" id="startTime"/>
+                        <span class="form-control levy-span">结束时间</span>
+                        <input class="form-control" date-time-picker
+                               ng-model="items.endTime" id="endTime" min-date="{{search.startTime}}"/>
+                    </p>
+                    <p class="form-inline">
+                        <span class="form-control levy-span">日志文件</span>
+                        <select class="form-control" ng-model="logSelected"
+                                ng-change="  items.logs =  selectLogNames(logSelected) ">
+                            <option value="all" >全部</option>
+                            <option ng-repeat="logNames in logFileNames"  >{{logNames}}</option>
+                        </select>
+                        <input type="text" class="form-control"  style="width:80%" ng-model="items.logs"/>
+                    </p>
+
+
+                    <!--            <div class="form-inline">
+                                    <span class="form-control levy-span"> 立即执行</span>
+                                    <div style="margin-top: -30px;margin-left: 95px;">
+                                        <label class="i-switch m-t-xs m-r">
+                                            <input class="form-control" style="width: 20px;height: 20px;background-color: #4cae4c"
+                                                   type="checkbox"
+                                                   ng-init="items.isUse = items['enabled'] == null?true:items['enabled']"
+                                                   ng-model="items.isUse" ng-checked="items.isUse">
+                                            <i></i>
+                                        </label>
+                                    </div>
+                                </div>-->
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-success" type="button"
+                        ng-show="items.logs && items.servers && items.startTime&& items.endTime" ng-click="createlog()">确认
+                </button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+            </div>
+        </form>
+    </script>
+
+    <script>
+        /**
+         *  操作类型选择
+         * @param obj
+         * @returns
+         */
+        function setOpTypeAct(obj) {
+            addOpTypeActClass(obj, null);
+        }
+
+
+        function addOpTypeActClass(obj, objType) {
+            var _obj = obj;
+
+            if (objType == 2) {
+                _obj = ".opType .value";
+            }
+            if ($(obj).hasClass("active")) {
+                $(obj).removeClass("active");
+                $(_obj).removeClass("active");
+            } else {
+                $(obj).addClass("active");
+                $(_obj).addClass("active");
+            }
+        }
+    </script>
+
+
+</div>

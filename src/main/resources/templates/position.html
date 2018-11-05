@@ -1,0 +1,89 @@
+
+
+<div ng-controller="positionCtrl">
+
+
+                        <div class="col-md-12" style="margin-top: 25px">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        position情况
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-inline">
+                                        <span class="form-control levy-span">ServerId</span>
+                                        <input class=" form-control" type="text" ng-model="position.serverId" />
+                                        <span class="form-control levy-span">fileName</span>
+                                        <input class=" form-control" type="text" ng-model="position.fileName" />
+                                        <button class="btn btn-info" ng-click="pageChanged(0,position)">查询</button>
+                                    </div>
+
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                编号
+                                            </th>
+                                            <th>
+                                                服务器ID
+                                            </th>
+                                            <th>
+                                                文件名
+                                            </th>
+                                            <th>
+                                                读取位置
+                                            </th>
+                                            <th>
+                                                时间
+                                            </th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="position in positions" ng-class="$index%3 == 0?'bg-success' : ($index-1)%3==0?'bg-warning':'bg-info'">
+                                            <td>
+                                                {{$index}}
+                                            </td>
+                                            <td >
+                                                {{position.serverId}}
+                                            </td>
+                                            <td >
+                                                {{position.fileName}}
+
+                                            </td>
+                                            <td >
+                                                <span ng-hide="posShow">{{position.position}}</span>
+                                                <input type="text"  ng-show="posShow" ng-model="position.position" />
+                                                <button type="button" class="btn btn-xs btn-info" ng-hide="posShow" ng-click="posShow = true">修改</button>
+                                                <button type="button" class="btn btn-xs btn-info" ng-show="posShow" ng-click="edit(position)">确认</button>
+                                                <button type="button" class="btn btn-xs btn-warning" ng-show="posShow" ng-click="posShow = false">取消</button>
+                                            </td>
+
+                                            <td >
+                                                {{position.updateTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+
+                                    <pagination total-items="bigTotalItems" items-per-page="pageSize"
+                                                ng-model="bigCurrentPage" max-size="20"
+                                                class="pagination" boundary-links="true" rotate="false"
+                                                ng-change="pageChanged(bigCurrentPage,topic)"
+                                                num-pages="numPages"></pagination>
+
+                                    <div class="count-page">
+                                        第{{pageNumSkip==0?1:pageNumSkip}}/{{pages}}页&nbsp; &nbsp; 共{{bigTotalItems}}条
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+</div>

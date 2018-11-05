@@ -1,0 +1,291 @@
+
+
+
+                        <div class="col-md-12" style="margin-top:-2px" ng-show="!configShow" ng-init="getConfigs()">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        定时任务 <button class="btn btn-success" ng-click="open({})">添加</button>
+                                        <button class="btn btn-info" ng-click="operate('pauseAll',{operate:''})">全部暂停</button>
+                                        <button class="btn btn-info" ng-click="operate('resumeAll',{operate:''})">全部恢复</button>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                编号
+                                            </th>
+                                            <th>
+                                               分组
+                                            </th>
+                                            <th>
+                                                Job名
+                                            </th>
+                                            <th>
+                                                执行类
+                                            </th>
+                                            <th>
+                                                corn
+                                            </th>
+                                            <th>
+                                                备注
+                                            </th>
+                                            <th>
+                                               状态信息
+                                            </th>
+                                            <th>
+                                                操作
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="config in configs">
+                                            <td >
+                                                {{$index+1}}
+                                            </td>
+                                            <td>
+                                               {{config.group}}
+                                            </td>
+                                            <td>
+                                                {{config.jobName}}
+                                            </td>
+                                            <td>
+                                                {{config.className}}
+                                            </td>
+                                            <td>
+                                                {{config.corn}}
+                                            </td>
+                                            <td>
+                                                {{config.info}}
+                                            </td>
+                                            <td>
+                                                {{config.status}}
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-success" ng-click="open(config)">修改</button>
+                                                <button class="btn btn-info" ng-click="operate('pause',config)">暂停</button>
+                                                <button class="btn btn-info" ng-click="operate('resume',config)">恢复</button>
+                                                <button class="btn btn-danger" ng-click="operate('delete',config)">删除</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--<div class="panel-footer">-->
+
+                                    <!--<pagination total-items="bigTotalItems1" items-per-page="pageSize1"-->
+                                                <!--ng-model="bigCurrentPage1" max-size="maxSize"-->
+                                                <!--class="pagination" boundary-links="true" rotate="false"-->
+                                                <!--ng-change="pageChanged1(bigCurrentPage1)"-->
+                                                <!--num-pages="numPages1"></pagination>-->
+
+                                    <!--<div class="count-page">-->
+                                        <!--第<input type="text" ng-model="pageNumSkip"/>/{{pages1}}页-->
+                                        <!--<span ng-click="skipTo(pageNumSkip)">跳转</span>&nbsp; &nbsp; 共{{bigTotalItems1}}条-->
+
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-12" style="margin-top: 25px">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        定时任务执行情况
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-inline">
+                                        <span class="form-control levy-span">执行JobId</span>
+                                        <input class=" form-control" type="text" ng-model="jobInfo.jobConfigId" />
+                                        <!--<span class="form-control levy-span">执行类</span>-->
+                                        <!--<input class=" form-control" type="text" ng-model="jobInfo.className" />-->
+                                        <span class="form-control levy-span">状态</span>
+                                        <input class=" form-control" type="text" ng-model="jobInfo.status" placeholder="1:成功 2：失败"/>
+                                        <button class="btn btn-info" ng-click="pageChanged(0,jobInfo)">查询</button>
+                                        <span class="form-control levy-span">备注</span>
+                                        <input class=" form-control" type="text" ng-model="jobInfo.info" />
+                                    </div>
+
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                编号
+                                            </th>
+                                            <th>
+                                                JobId
+                                            </th>
+                                            <th>
+                                                分组
+                                            </th>
+                                            <th>
+                                                Job
+                                            </th>
+                                            <th>
+                                                执行类
+                                            </th>
+                                            <th>
+                                                corn
+                                            </th>
+                                            <th>
+                                                开始时间
+                                            </th>
+                                            <th>
+                                                结束时间
+                                            </th>
+                                            <th>
+                                                状态
+                                            </th>
+                                            <th>
+                                                备注
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="job in jobs">
+                                            <td style="width: 3%">
+                                                {{$index}}
+                                            </td>
+                                            <td style="width: 3%">
+                                                {{job.jobConfigId}}
+                                            </td>
+                                            <td style="width: 3%">
+                                                {{job.group}}
+                                            </td>
+                                            <td style="width: 3%">
+                                                {{job.jobName}}
+                                            </td>
+                                            <td style="width: 15%">
+                                                {{job.className}}
+                                            </td>
+                                            <td style="width: 10%">
+                                                {{job.corn}}
+                                            </td>
+                                            <td style="width: 10%">
+                                                {{job.startTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                                            </td>
+                                            <td style="width: 10%">
+                                                {{job.endTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                                            </td>
+                                            <td style="width: 6%">
+                                                <span ng-show="job.status == 0" style="color: #46b8da">运行中......</span>
+                                                <span ng-show="job.status == 1" style="color: #4cae4c">成功</span>
+                                                <span ng-show="job.status == 2" style="color: red">失败</span>
+                                            </td>
+                                            <td>
+                                                <div style="max-width:600px;max-height:250px;overflow:hidden;text-overflow:ellipsis;" data-toggle="tooltip" title="{{job.info}}"> {{job.info}}</div>
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+
+                                    <pagination total-items="bigTotalItems" items-per-page="pageSize"
+                                                ng-model="bigCurrentPage" max-size="20"
+                                                class="pagination" boundary-links="true" rotate="false"
+                                                ng-change="pageChanged(bigCurrentPage,jobInfo)"
+                                                num-pages="numPages"></pagination>
+
+                                    <div class="count-page">
+                                        第{{pageNumSkip==0?1:pageNumSkip}}/{{pages}}页&nbsp; &nbsp; 共{{bigTotalItems}}条
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+<script type="text/ng-template" id="addUserModel">
+    <div class="modal-header">
+        <h4 class="modal-title">{{items['id']?'修改':'添加'}}定时器任务</h4>
+    </div>
+    <form name="myForm">
+        <div class="modal-body">
+            <div class="form-group">
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 分组</span>
+                    <input type="text" class="form-control" ng-disabled="items['id']?true:false" ng-model="items.group" placeholder="group">
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span"> Job</span>
+                    <input type="text" class="form-control" ng-disabled="items['id']?true:false" ng-model="items.jobName" placeholder="Job">
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 备注</span>
+                    <input type="text" class="form-control"  ng-model="items.info" placeholder="说明用途">
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span" style="cursor:pointer" ng-click="example=!example">corn表达式</span>
+                    <input type="text" class="form-control" ng-model="items.corn" placeholder="点击名称获取示例">
+                    <div class="well" ng-show="example">
+                        CRON表达式 &nbsp; &nbsp; &nbsp;&nbsp;含义&nbsp;<br><br>
+                        0/5 * * * * ? &nbsp; &nbsp;每5秒触发&nbsp;<br>
+                        0 0/1 * * * ? &nbsp; &nbsp;每分整触发&nbsp;<br>
+                        0 0 12 * * ? &nbsp; &nbsp;每天中午十二点触发&nbsp;<br>
+                        0 15 10 ? * * &nbsp; &nbsp;每天早上10：15触发&nbsp;<br>
+                        0 15 10 * * ? &nbsp; &nbsp;每天早上10：15触发&nbsp;<br>
+                        0 15 10 * * ? * &nbsp; &nbsp;每天早上10：15触发&nbsp;<br>
+                        0 15 10 * * ? 2005 &nbsp; &nbsp;2005年的每天早上10：15触发&nbsp;<br>
+                        0 * 14 * * ? &nbsp; &nbsp;每天从下午2点开始到2点59分每分钟一次触发&nbsp;<br>
+                        0 0/5 14 * * ? &nbsp; &nbsp;每天从下午2点开始到2：55分结束每5分钟一次触发&nbsp;<br>
+                        0 0/5 14,18 * * ? &nbsp; &nbsp;每天的下午2点至2：55和6点至6点55分两个时间段内每5分钟一次&nbsp;<br>
+                        0 0-5 14 * * ? &nbsp; &nbsp;每天14:00至14:05每分钟一次触发&nbsp;<br>
+                        0 10,44 14 ? 3 WED &nbsp; &nbsp;三月的每周三的14：10和14：44触发&nbsp;<br>
+                        0 15 10 ? * MON-FRI &nbsp; &nbsp;每个周一、周二、周三、周四、周五的10：15触发<br>
+                <p><br></p>
+            </div>
+            </p>
+            <p class="form-inline">
+                <span class="form-control levy-span" style="cursor:pointer" ng-click="classNameShow=!classNameShow">Job执行目标类</span>
+                <input type="text" class="form-control"  ng-disabled="items['id']?true:false" ng-model="items.className"  placeholder="点击名称获取示例 ">
+            <div class="well" ng-show="classNameShow">
+            例如：com.spc.schedule.job.XXX
+            </div>
+            </p>
+
+            <!--<div class="form-inline">
+                <span class="form-control levy-span"> 立即执行</span>
+                <div style="margin-top: -30px;margin-left: 95px;">
+                    <label class="i-switch m-t-xs m-r">
+                        <input class="form-control" style="width: 20px;height: 20px;background-color: #4cae4c"
+                               type="checkbox"
+                               ng-init="items.isUse = items['enabled'] == null?true:items['enabled']"
+                               ng-model="items.isUse" ng-checked="items.isUse">
+                        <i></i>
+                    </label>
+                </div>
+            </div>-->
+
+            <!--<div class="form-group">-->
+            <!--<label class="col-sm-2 control-label">是否启用</label>-->
+            <!--<div class="col-sm-10">-->
+
+            <!--<label class="i-switch bg-info m-t-xs m-r">-->
+            <!--<input type="checkbox" checked>-->
+            <!--<i></i>-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>-->
+
+        </div>
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="btn btn-success" type="button"
+                    ng-show="items.jobName && items.group && items.corn && items.className && items.info " ng-click="items['id']?editJob():createJob()">确认
+            </button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+        </div>
+    </form>
+</script>

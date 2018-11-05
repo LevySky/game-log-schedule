@@ -1,0 +1,128 @@
+
+<div ng-controller="logConfig">
+
+    <div class="col-md-12" style="margin-top: 25px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    日志配置
+                    <button class="btn btn-success" ng-click="openLogConfig({})">添加</button>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <!--<div class="form-inline">-->
+                <!--<span class="form-control levy-span">执行类</span>-->
+                <!--<input class=" form-control" type="text" ng-model="className" />-->
+                <!--<button class="btn btn-info" ng-click="pageChanged(0,className)">查询</button>-->
+                <!--</div>-->
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            编号
+                        </th>
+                        <th>
+                            日志存储文件名
+                        </th>
+                        <th>
+                            日志集合名
+                        </th>
+                        <th>
+                            日志过滤标识
+                        </th>
+                        <th>
+                            日志切割标识
+                        </th>
+                        <th>
+                            更新时间
+                        </th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="logConfig in logConfigs">
+                        <td style="width: 3%">
+                            {{$index+1}}
+                        </td>
+                        <td>
+                            {{logConfig.logFileName}}
+                        </td>
+                        <td>
+                            {{logConfig.collectionName}}
+                        </td>
+                        <td>
+                            {{logConfig.filterFlag}}
+                        </td>
+                        <td>
+                            {{logConfig.spliteFlag}}
+                        </td>
+                        <td>
+                            {{logConfig.updateTime|date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+
+                        <td>
+                            <button class="btn btn-info" ng-click="openLogConfig(logConfig)">修改</button>
+                            <button class="btn btn-danger" ng-click="delete(logConfig)">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="panel-footer">-->
+
+            <!--<pagination total-items="bigTotalItems" items-per-page="pageSize"-->
+            <!--ng-model="bigCurrentPage" max-size="maxSize"-->
+            <!--class="pagination" boundary-links="true" rotate="false"-->
+            <!--ng-change="pageChanged(bigCurrentPage,className)"-->
+            <!--num-pages="numPages"></pagination>-->
+
+            <!--<div class="count-page">-->
+            <!--第{{pageNumSkip==0?1:pageNumSkip}}/{{pages}}页&nbsp; &nbsp; 共{{bigTotalItems}}条-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+        </div>
+    </div>
+
+
+<script type="text/ng-template" id="addLogConfigModel">
+    <div class="modal-header">
+        <h4 class="modal-title">{{items['id']?'修改':'添加'}}日志配置</h4>
+    </div>
+    <form name="myForm">
+        <div class="modal-body">
+            <div class="form-group">
+
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 日志存储文件名</span>
+                    <input type="text" class="form-control"  ng-model="items.logFileName" >
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 日志集合名</span>
+                    <input type="text" class="form-control"  ng-model="items.collectionName" >
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 日志过滤标识</span>
+                    <input type="text" class="form-control"  ng-model="items.filterFlag" >
+                </p>
+                <p class="form-inline">
+                    <span class="form-control levy-span"> 日志切割标识</span>
+                    <input type="text" class="form-control"  ng-model="items.spliteFlag" >
+                </p>
+
+        </div>
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="btn btn-success" type="button"
+                    ng-show="items.logFileName && items.collectionName && items.filterFlag && items.spliteFlag " ng-click="confirm()">确认
+            </button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+        </div>
+    </form>
+</script>
+
+</div>
